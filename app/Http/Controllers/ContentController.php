@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+require_once $_SERVER['DOCUMENT_ROOT'].'/../functions.php';
+
 class ContentController extends Controller
 {
     public function Add(Request $request, $content){

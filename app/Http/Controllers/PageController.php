@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+require_once $_SERVER['DOCUMENT_ROOT'].'/../functions.php';
+
 class PageController extends Controller
 {
     public function SinglePage(Request $request, $page, $id){
@@ -34,6 +36,10 @@ class PageController extends Controller
                 break;
             case 'disport':
                 return view('disport');
+                break;
+            case 'users':
+                if (isAdmin()) return view('users');
+                else return response()->view('errors.404', $request, 404);
                 break;
             default:
                 return response()->view('errors.404', $request, 404);

@@ -10,3 +10,4 @@
 <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap/bootstrap-icons.css">
 <link rel="stylesheet" href="/css/style.css">
+@yield('styles')

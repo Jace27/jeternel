@@ -19,6 +19,9 @@ function isAdmin(){
 function echo_list($list, $top = true){
     if (!$top) echo '<img src="/images/icons/arrow_down.png" class="open_arrow">';
     echo '<ul style="'.( $top ? 'display: block;' : 'display: none;' ).'">';
+    if ($top){
+        echo '<li><a href="/category/0">Услуги без категории</a></li>';
+    }
     foreach ($list as $item){
         if (($top && count($item->parent()->get()) == 0) || (!$top && count($item->parent()->get()) != 0)) {
             echo '<li>';

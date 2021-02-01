@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\users;
 use Illuminate\Http\Request;
 
+require_once $_SERVER['DOCUMENT_ROOT'].'/../functions.php';
+
 class UserController extends Controller
 {
     public function CheckPhone(Request $request){
