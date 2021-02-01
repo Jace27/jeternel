@@ -1,0 +1,136 @@
+.btn-outline-primary {
+    color: rgb(167, 97, 45) !important;
+    border-color: rgb(167, 97, 45) !important;
+    background-color: rgb(255, 255, 255) !important;
+}
+.btn-outline-primary:hover {
+    color: rgb(255, 255, 255) !important;
+    border-color: rgb(167, 97, 45) !important;
+    background-color: rgb(167, 97, 45) !important;
+}
+.btn-primary {
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(167, 97, 45) !important;
+    border-color: rgb(167, 97, 45) !important;
+}
+.btn-primary:hover {
+    color: rgb(167, 97, 45) !important;
+    border-color: rgb(167, 97, 45) !important;
+    background-color: rgb(255, 255, 255) !important;
+}
+.btn-link           { color: rgba(167, 97, 45, 1); }
+.btn-link:hover     { color: rgba(167, 97, 45, 1); }
+.btn-link:visited   { color: rgba(167, 97, 45, 1); }
+a           { color: rgba(167, 97, 45, 1); }
+a:hover     { color: rgba(167, 97, 45, 1); }
+a:visited   { color: rgba(167, 97, 45, 1); }
+
+table {
+    width: 100%;
+    height: 100%;
+}
+.search-input {
+    cursor: pointer;
+}
+.search {
+    width: calc(100% - 64px);
+    display: inline-block;
+}
+.bi-search {
+    display: inline-block;
+    margin-left: 8px;
+}
+td {
+    padding: 5px;
+}
+td:nth-child(1), td:nth-child(3) {
+    min-width: 20%;
+    max-width: 20%;
+    width: 20%;
+}
+td:nth-child(2) {
+    min-width: 60%;
+    max-width: 60%;
+    width: 60%;
+}
+td:nth-child(3) {
+    text-align: right;
+}
+td.menu {
+    vertical-align: top;
+}
+
+.d-grid {
+    display: grid;
+}
+@media (min-width: 576px) {
+    .d-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .d-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .d-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .d-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+ul {
+    padding-inline-start: 0px;
+}
+.menu ul, .top-menu ul, .articles_list ul {
+    list-style: none;
+}
+.menu li, .articles_list li {
+    margin-bottom: -1px;
+    background: linear-gradient(0, rgba(167, 97, 45, 0.15), #fff, rgba(167, 97, 45, 0.15));
+    border: 1px #ddd solid;
+    padding: 3px;
+    cursor: pointer;
+    position: relative;
+}
+.menu li a, .articles_list li a {
+    margin-right: 30px;
+}
+.menu .open_arrow, .articles_list .open_arrow {
+    width: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.top-menu ul {
+    margin-bottom: 3px;
+}
+.top-menu li {
+    margin-right: 10px;
+    display: inline-block;
+    color: rgb(167, 97, 45);
+}
+
+table.performers td, table.performers th {
+    vertical-align: top;
+    border: 1px solid black;
+    text-align: left;
+}
+
+.important_news::before {
+    content: 'Важно!';
+    color: red;
+    font-weight: 700;
+}
