@@ -15,6 +15,10 @@
         img {
             max-width: 100%;
         }
+        #messages > * {
+            max-width: 400px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -23,9 +27,11 @@
 
     <div class="align-middle">
         <img src="/images/logo.png">
-        <div class="alert alert-warning d-none" role="alert" id="warning"></div>
-        @include('includes.message')
-        <div class="alert alert-danger d-none" role="alert" id="errors"></div>
+        <div id="messages">
+            <div class="alert alert-warning d-none" role="alert" id="warning"></div>
+            @include('includes.message')
+            <div class="alert alert-danger d-none" role="alert" id="errors"></div>
+        </div>
         <form action="/signin" method="post" name="signin_form">
             @csrf
             <input type="text" name="phone" placeholder="Номер телефона"><br>

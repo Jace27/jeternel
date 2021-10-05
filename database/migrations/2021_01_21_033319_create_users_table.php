@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->integer('role_id')->unsigned()->default(2);
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('third_name');
+            $table->string('second_name');
         });
     }
 
@@ -31,6 +31,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('signin_logs', function (Blueprint $table){
+            $table->dropForeign('signin_logs_user_id_foreign');
+        });
         Schema::dropIfExists('users');
     }
 }

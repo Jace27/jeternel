@@ -10,11 +10,13 @@ class branches extends Model
     use HasFactory;
     public $timestamps = false;
     protected $fillable = [
+        '1c_id',
         'name',
-        'address'
+        'address',
+        'isvip'
     ];
 
     public function performers(){
-        return $this->hasMany('\App\Models\performers', 'branch_id', 'id');
+        return $this->belongsToMany('\App\Models\performers', 'performers_branches', 'branch_id', 'performer_id');
     }
 }

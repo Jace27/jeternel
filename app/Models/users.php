@@ -15,7 +15,7 @@ class users extends Model
         'role_id',
         'first_name',
         'last_name',
-        'third_name'
+        'second_name'
     ];
 
     public function role(){

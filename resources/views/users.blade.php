@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-Пользователи - База знаний Jeternel @endsection
+Пользователи - {{ \App\Settings::$title_site_name }} @endsection
 
 @section('styles')
     <style>
@@ -17,7 +17,7 @@
     if (count($users) == 0){
         echo '<h3>Нет пользователей</h3>';
     } else {
-        $roles = \App\Models\roles::all();
+        $roles = \App\Models\roles::where('name', '<>', 'Разработчик')->get();
     ?>
     <h3>Пользователи</h3>
     <div class="alert alert-success" role="alert" style="display: none;"></div>
@@ -25,28 +25,34 @@
     <table class="table">
         <tbody>
         <tr>
-            <th><input type="checkbox" class="select-all-checkbox"></th>
-            <th>Телефон</th>
+            <th width="30"><input type="checkbox" class="select-all-checkbox"></th>
+            <th width="110">Телефон</th>
             <th>Фамилия</th>
             <th>Имя</th>
             <th>Отчество</th>
-            <th>Статус</th>
+            <th width="200">Статус</th>
         </tr>
-        @foreach ($users as $user)
-            <tr class="user-{{ $user->id }}">
-                <td><input type="checkbox" class="select-one-checkbox"></td>
-                <td>{{ $user->phone }}</td>
-                <td>{{ $user->last_name }}</td>
-                <td>{{ $user->first_name }}</td>
-                <td>{{ $user->third_name }}</td>
-                <td>
-                    <select class="form-control user-role-select" style="width: 173px;">
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}" @if($role->id == $user->role()->first()->id) selected @endif>{{ $role->name }}</option>
-                        @endforeach
-                    </select>
-                </td>
-            </tr>
+        @foreach(\App\Models\roles::orderBy('id', 'asc')->get() as $role)
+            @foreach ($role->users()->orderBy('last_name', 'asc')->get() as $user)
+                <tr class="user-{{ $user->id }}">
+                    <td><input type="checkbox" class="select-one-checkbox"></td>
+                    <td>{{ $user->phone }}</td>
+                    <td>{{ $user->last_name }}</td>
+                    <td>{{ $user->first_name }}</td>
+                    <td>{{ $user->second_name }}</td>
+                    <td>
+                        @if ($user->role()->first()->name == 'Разработчик')
+                            {{ $user->role()->first()->name }}
+                        @else
+                            <select class="form-control user-role-select" style="width: 173px;">
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}" @if($role->id == $user->role()->first()->id) selected @endif>{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
         @endforeach
         <tr>
             <td colspan="6">
@@ -90,7 +96,7 @@
                     </p>
                     <p>
                         <b>Отчество:</b><br>
-                        <input type="text" name="third_name" id="user-new-third-name" class="form-control">
+                        <input type="text" name="second_name" id="user-new-second-name" class="form-control">
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -149,7 +155,13 @@
                             } else if (data.status == 'error'){
                                 $('.alert-danger').html(data.message);
                                 $('.alert-danger').slideDown(300);
+                            } else {
+                                display_error(xhr);
                             }
+                        },
+                        error: function(xhr){
+                            display_error(xhr);
+
                         }
                     });
                 });
@@ -173,7 +185,13 @@
                                 } else if (data.status == 'error') {
                                     $('.alert-danger').html(data.message);
                                     $('.alert-danger').slideDown(300);
+                                } else {
+                                    display_error(xhr);
                                 }
+                            },
+                            error: function(xhr){
+                                display_error(xhr);
+
                             }
                         });
                         array.splice(index, 1);
@@ -204,7 +222,20 @@
                         } else if (data.status == 'error'){
                             $('.alert-danger').html(data.message);
                             $('.alert-danger').slideDown(300);
+                        } else {
+                            display_error(xhr);
                         }
+                    },
+                    error: function(xhr){
+                        if (xhr.responseJSON != null){
+                            if (xhr.responseJSON.message != null)
+                                display_error(xhr.responseJSON.message);
+                            else
+                                display_error(xhr.responseText);
+                        } else {
+                            display_error(xhr.responseText);
+                        }
+
                     }
                 });
             });
@@ -269,6 +300,17 @@
                             $('.user-new-modal-danger').html('Не удалось проверить статус пользователя');
                             $('.user-new-modal-danger').slideDown(300);
                         }
+                    },
+                    error: function(xhr){
+                        if (xhr.responseJSON != null){
+                            if (xhr.responseJSON.message != null)
+                                display_error(xhr.responseJSON.message);
+                            else
+                                display_error(xhr.responseText);
+                        } else {
+                            display_error(xhr.responseText);
+                        }
+                        $('#ErrorModal').modal('show');
                     }
                 });
             });
@@ -282,7 +324,7 @@
                     data.append($('#user-new-phone').attr('name'), $('#user-new-phone').val());
                     data.append($('#user-new-last-name').attr('name'), $('#user-new-last-name').val());
                     data.append($('#user-new-first-name').attr('name'), $('#user-new-first-name').val());
-                    data.append($('#user-new-third-name').attr('name'), $('#user-new-third-name').val());
+                    data.append($('#user-new-second-name').attr('name'), $('#user-new-second-name').val());
                     $.ajax({
                         url: '/api/user/add',
                         method: 'post',
@@ -293,9 +335,20 @@
                             console.log([data, status, xhr]);
                             if (data.status == 'success') {
                                 window.location.reload();
-                            } else if (data.status == 'error'){
-
+                            } else {
+                                display_error(xhr);
                             }
+                        },
+                        error: function(xhr){
+                            if (xhr.responseJSON != null){
+                                if (xhr.responseJSON.message != null)
+                                    display_error(xhr.responseJSON.message);
+                                else
+                                    display_error(xhr.responseText);
+                            } else {
+                                display_error(xhr.responseText);
+                            }
+                            $('#ErrorModal').modal('show');
                         }
                     });
                 }

@@ -15,8 +15,9 @@ class CreateDrugsTable extends Migration
     {
         Schema::create('drugs', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('1c_id')->unique()->nullable();
             $table->string('name');
-            $table->string('manufacturer');
+            $table->string('manufacturer')->nullable();
         });
     }
 

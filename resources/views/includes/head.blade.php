@@ -7,6 +7,7 @@
                minimum-scale=1.0">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/ico">
 <link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/jquery-ui.css">
 <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap/bootstrap-icons.css">
 <link rel="stylesheet" href="/css/style.css">

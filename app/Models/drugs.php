@@ -10,6 +10,7 @@ class drugs extends Model
     use HasFactory;
     public $timestamps = false;
     protected $fillable = [
+        '1c_id',
         'name',
         'manufacturer'
     ];

@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\users;
 use Illuminate\Http\Request;
-
-require_once $_SERVER['DOCUMENT_ROOT'].'/../functions.php';
+use App\Functions;
 
 class UserController extends Controller
 {
     public function CheckPhone(Request $request){
-        $user = users::where('phone', $request->input('phone'))->first();
+        $phone = $request->input('phone');
+        $user = users::where('phone', mb_substr($phone, mb_strlen($phone) - 10, 10))->first();
         if ($user == null){
             return [ 'status' => 'user does not exist' ];
         } else {
@@ -22,8 +22,9 @@ class UserController extends Controller
         }
     }
     public function SignIn(Request $request){
-        session_start();
-        $user = users::where('phone', $request->input('phone'))->get();
+        if (!isset($_SESSION)) session_start();
+        $phone = $request->input('phone');
+        $user = users::where('phone', mb_substr($phone, mb_strlen($phone) - 10, 10))->get();
         if (count($user) == 1){
             $user = $user[0];
             $logged = false;
@@ -37,6 +38,12 @@ class UserController extends Controller
 
             if ($logged){
                 $_SESSION['user'] = $user->phone;
+                if (\App\Models\signin_logs::where('time', date('Y-m-d H:i:s'))->where('user_id', $user->id)->first() == null) {
+                    \App\Models\signin_logs::create([
+                        'user_id' => $user->id,
+                        'time' => date('Y-m-d H:i:s', time() + 60*60*5)
+                    ]);
+                }
                 return redirect()->route('main_page');
             } else {
                 $_SESSION['message'] = '{ "status": "danger", "message": "Неверный пароль" }';
@@ -53,7 +60,7 @@ class UserController extends Controller
         return redirect()->route('signin');
     }
     public function ResetPassword(Request $request, $id){
-        if (isAdmin()){
+        if (Functions::is_admin()){
             $user = \App\Models\users::where('id', $id)->first();
             if ($user != null){
                 $user->password = password_hash('12345678', PASSWORD_BCRYPT);
@@ -63,11 +70,11 @@ class UserController extends Controller
                 return [ 'status' => 'error', 'message' => 'user does not exist' ];
             }
         } else {
-            return [ 'status' => 'error', 'message' => 'not enough permissions' ];
+            return [ 'status' => 'error', 'message' => 'Недостаточно прав' ];
         }
     }
     public function Delete(Request $request, $id){
-        if (isAdmin()){
+        if (Functions::is_admin()){
             $user = \App\Models\users::where('id', $id)->first();
             if ($user != null){
                 $user->delete();
@@ -76,7 +83,7 @@ class UserController extends Controller
                 return [ 'status' => 'error', 'message' => 'user does not exist' ];
             }
         } else {
-            return [ 'status' => 'error', 'message' => 'not enough permissions' ];
+            return [ 'status' => 'error', 'message' => 'Недостаточно прав' ];
         }
     }
 }

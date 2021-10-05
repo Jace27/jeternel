@@ -11,7 +11,7 @@ let validator = new FormValidator('signin_form', [
     {
         name: 'phone',
         display: 'Номер телефона',
-        rules: 'required|min_length[10]|max_length[10]|numeric|callback_user'
+        rules: 'required|min_length[10]|numeric|callback_user'
     },
     {
         name: 'password',
@@ -20,6 +20,7 @@ let validator = new FormValidator('signin_form', [
     },
 ], function(errors, event){
     last_errors = errors;
+    if (last_errors.length != 0) submitting = false;
     display_errors();
 });
 validator.registerCallback('user', function(value){
@@ -27,19 +28,18 @@ validator.registerCallback('user', function(value){
     return true;
 });
 validator.setMessage('required', 'Поле %s должно быть заполнено');
-validator.setMessage('min_length', 'Поле %s должно содержать %s символов');
-validator.setMessage('max_length', 'Поле %s должно содержать %s символов');
+validator.setMessage('min_length', 'Поле %s должно содержать не меньше %s символов');
 validator.setMessage('numeric', 'Поле %s должно содержать только цифры');
 
 function display_errors(){
     if (last_errors.length > 0) {
-        let ul = document.createElement('UL');
+        let div = document.createElement('DIV');
         for (let i = 0; i < last_errors.length; i++) {
-            let li = document.createElement('LI');
-            li.innerText = last_errors[i].message;
-            ul.append(li);
+            let p = document.createElement('P');
+            p.innerText = last_errors[i].message;
+            div.append(p);
         }
-        $('#errors').html(ul);
+        $('#errors').html(div);
         $('#errors').removeClass('d-none');
     } else {
         $('#errors').html('');
@@ -73,6 +73,7 @@ function check_user(phone) {
                 switch (data.status) {
                     case 'user does not exist':
                         last_errors.push({ message: 'Пользователя не существует' });
+                        submitting = false;
                         display_errors();
                         break;
                     case 'new user':
@@ -84,8 +85,10 @@ function check_user(phone) {
                 }
                 display_errors();
             } else {
-                console.log(xhr);
+                display_error(xhr);
+
                 last_errors.push({ message: 'Не удалось проверить статус пользователя' });
+                submitting = false;
                 display_errors();
             }
 
@@ -93,6 +96,10 @@ function check_user(phone) {
                 submitting = true;
                 $('form[name=signin_form]').submit();
             }
+        },
+        error: function(xhr){
+            display_error(xhr);
+
         }
     });
 }

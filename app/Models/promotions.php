@@ -10,7 +10,6 @@ class promotions extends Model
     use HasFactory;
     public $timestamps = true;
     protected $fillable = [
-        'type_id',
         'title',
         'banner_file',
         'description',
@@ -18,7 +17,7 @@ class promotions extends Model
         'end'
     ];
 
-    public function type(){
-        return $this->belongsTo('\App\Models\promotions_types', 'type_id', 'id');
+    public function services(){
+        return $this->hasMany('\App\Models\service_promotions', 'promotion_id', 'id');
     }
 }

@@ -15,8 +15,10 @@ class CreateBranchesTable extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('1c_id')->unique()->nullable();
+            $table->string('name')->nullable();
             $table->string('address');
+            $table->boolean('isvip')->default(false);
         });
     }
 
@@ -27,8 +29,8 @@ class CreateBranchesTable extends Migration
      */
     public function down()
     {
-        Schema::table('performers', function (Blueprint $table){
-            $table->dropForeign('performers_branch_id_foreign');
+        Schema::table('performers_branches', function (Blueprint $table){
+            $table->dropForeign('performers_branches_branch_id_foreign');
         });
         Schema::dropIfExists('branches');
     }

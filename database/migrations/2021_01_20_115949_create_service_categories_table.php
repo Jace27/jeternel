@@ -15,6 +15,7 @@ class CreateServiceCategoriesTable extends Migration
     {
         Schema::create('service_categories', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('1c_id')->unique()->nullable();
             $table->string('name');
             $table->integer('parent_category_id')->unsigned()->nullable();
             $table->integer('type_id')->unsigned();

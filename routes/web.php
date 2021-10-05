@@ -28,5 +28,18 @@ Route::get('/signin', function (){
 Route::post('/signin', [ '\App\Http\Controllers\UserController', 'SignIn' ]);
 Route::get('/signout', [ '\App\Http\Controllers\UserController', 'SignOut' ]);
 
-Route::get('/{page}/{id}', [ '\App\Http\Controllers\PageController', 'SinglePage' ]);
+Route::get('/log', function(){
+    if (!isset($_SESSION)) session_start();
+    if (isset($_SESSION['user']))
+        return view('log');
+    else
+        return redirect()->route('main_page');
+});
+
+Route::get('/{page}/search', function(\Illuminate\Http\Request $request, $page){
+    return view('search', ['page'=>$page]);
+});
+Route::get('/{page}/new', [ '\App\Http\Controllers\PageController', 'NewPage' ]);
+Route::get('/{page}/{id}/edit', [ '\App\Http\Controllers\PageController', 'EditPage' ])->where('id', '[0-9]+');
+Route::get('/{page}/{id}', [ '\App\Http\Controllers\PageController', 'SinglePage' ])->where('id', '[0-9]+');
 Route::get('/{page}', [ '\App\Http\Controllers\PageController', 'ListPage' ]);

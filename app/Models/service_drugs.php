@@ -12,8 +12,7 @@ class service_drugs extends Model
     protected $fillable = [
         'service_id',
         'drug_id',
-        'using_volume',
-        'comment'
+        'using_volume'
     ];
 
     public function service(){

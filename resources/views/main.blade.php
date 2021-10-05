@@ -1,30 +1,36 @@
 @extends('layout')
 
 @section('title')
-База знаний Jeternel @endsection
+{{ \App\Settings::$title_site_name }} @endsection
 
 @section('body')
-    <?php
-    $news = \App\Models\news::where('is_important', 1)->get();
-    if (count($news) == 0){
-        echo '<h3>Нет новостей</h3>';
-    } else {
-        echo '<h3>Новости:</h3>';
-        foreach ($news as $n){
-            echo '<div class="important_news"><p><b>'.$n->title.'</b></p>';
-            echo '<p>'.$n->content.'</p></div><hr>';
-        }
-    }
-    ?>
-    <?php
-    $promotions = \App\Models\promotions::all();
-    if (count($promotions) == 0){
-        echo 'Нет акций';
-    } else {
-        echo '<h3>Текущие акции:</h3>';
-        foreach ($promotions as $promotion){
-            echo '<p><a href="/promotion/'.$promotion->id.'"><b>'.$promotion->title.'</b></a><br>'.mb_substr(strip_tags($promotion->description), 0, 250).'...'.'</p><hr>';
-        }
-    }
-    ?>
+    <div class="d-grid" style="grid-template-columns: 1fr">
+
+        <div class="align-center">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Важная информация:</th>
+                </tr>
+                @foreach(\App\Models\news::where('is_important', 1)->orderBy('updated_at', 'desc')->get() as $new)
+                    <tr>
+                        <td>
+                            <b class="important">{{ $new->title }}</b> <span style="color: #666">{{ date('H:i d.m.Y', strtotime($new->updated_at) + 5*60*60) }}</span><br>
+                            <p>{!! $new->content !!}</p>
+                        </td>
+                    </tr>
+                @endforeach
+                @foreach(\App\Models\news::where('is_important', 0)->orderBy('updated_at', 'desc')->get() as $new)
+                    <tr>
+                        <td>
+                            <b>{{ $new->title }}</b> <span style="color: #666">{{ date('H:i d.m.Y', strtotime($new->updated_at)+5*60*60) }}</span><br>
+                            <p>{!! $new->content !!}</p>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 @endsection

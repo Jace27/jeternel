@@ -15,13 +15,14 @@ class CreatePerformersTable extends Migration
     {
         Schema::create('performers', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('1c_id')->unique()->nullable();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('third_name');
+            $table->string('second_name')->nullable();
             $table->string('photo')->nullable();
-            $table->text('specialization');
-            $table->text('experience');
-            $table->integer('branch_id')->unsigned()->nullable();
+            $table->longText('presentation');
+            $table->integer('type_id')->unsigned();
+            $table->string('working_hours')->nullable();
         });
     }
 
@@ -34,6 +35,12 @@ class CreatePerformersTable extends Migration
     {
         Schema::table('service_performers', function (Blueprint $table){
             $table->dropForeign('service_performers_performer_id_foreign');
+        });
+        Schema::table('performers_branches', function (Blueprint $table){
+            $table->dropForeign('performers_branches_performer_id_foreign');
+        });
+        Schema::table('performers_performers_statuses', function (Blueprint $table){
+            $table->dropForeign('performers_performers_statuses_performer_id_foreign');
         });
         Schema::dropIfExists('performers');
     }

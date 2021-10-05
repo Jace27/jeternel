@@ -15,14 +15,17 @@ class CreateServicesTable extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('1c_id')->unique()->nullable();
+            $table->string('name')->unique();
             $table->longText('description');
             $table->longText('preparation');
             $table->longText('rehabilitation');
+            $table->longText('indications');
             $table->longText('contraindications');
-            $table->text('duration');
             $table->text('course');
-            $table->integer('cost');
+            $table->integer('price_id')->unsigned();
+            $table->text('instruct1');
+            $table->text('instruct2');
             $table->timestamps();
             $table->softDeletes('deleted_at');
         });

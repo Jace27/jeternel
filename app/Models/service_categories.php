@@ -10,6 +10,7 @@ class service_categories extends Model
     use HasFactory;
     public $timestamps = false;
     protected $fillable = [
+        '1c_id',
         'name',
         'parent_category_id',
         'type_id'

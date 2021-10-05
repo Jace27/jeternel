@@ -12,8 +12,6 @@ class news extends Model
     protected $fillable = [
         'title',
         'content',
-        'is_important',
-        'created_at',
-        'updated_at'
+        'is_important'
     ];
 }

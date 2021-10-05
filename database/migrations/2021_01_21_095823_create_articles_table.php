@@ -17,7 +17,7 @@ class CreateArticlesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->longText('content');
-            $table->integer('section_id')->unsigned();
+            $table->integer('section_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }

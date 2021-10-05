@@ -14,4 +14,11 @@ class service_performers extends Model
         'performer_id',
         'duration'
     ];
+
+    public function service(){
+        return $this->belongsTo('\App\Models\services', 'service_id', 'id');
+    }
+    public function performer(){
+        return $this->belongsTo('\App\Models\performers', 'performer_id', 'id');
+    }
 }

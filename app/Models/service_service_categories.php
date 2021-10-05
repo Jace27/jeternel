@@ -13,4 +13,11 @@ class service_service_categories extends Model
         'service_id',
         'category_id',
     ];
+
+    public function service(){
+        return $this->belongsTo('\App\Models\services', 'service_id', 'id');
+    }
+    public function category(){
+        return $this->belongsTo('\App\Models\service_categories', 'category_id', 'id');
+    }
 }

@@ -18,7 +18,7 @@ class CreateServiceDrugsTable extends Migration
             $table->integer('service_id')->unsigned();
             $table->integer('drug_id')->unsigned();
             $table->string('using_volume')->nullable();
-            $table->longText('comment');
+            //$table->longText('comment');
         });
     }
 
